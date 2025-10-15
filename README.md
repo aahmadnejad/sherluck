@@ -3,13 +3,13 @@
 ![Offensive](https://img.shields.io/badge/Purpose-Offensive%20Redteam-red)
 ![John](https://img.shields.io/badge/Integration-John%20The%20Ripper-orange)
 
-# 🔍 Sherluck - Advanced Personal Data Wordlist Generator
+# Sherluck - Advanced Personal Data Wordlist Generator
 
 <img src="./SherluckLogo.png" alt="Sherluck Icon" width="350"/>
 
 Sherluck is a powerful Python-based wordlist generator designed for cybersecurity professionals, penetration testers, and security researchers. It creates comprehensive password wordlists from personal data using advanced pattern recognition, leet speak transformations, and intelligent combinations with built-in John the Ripper integration.
 
-## ✨ Features
+## Features
 
 - **Multi-format Support**: Handles both single values and arrays in JSON input
 - **Weighted Generation**: Prioritizes words based on importance weights
@@ -23,7 +23,7 @@ Sherluck is a powerful Python-based wordlist generator designed for cybersecurit
 - **John the Ripper Integration**: Direct execution with generated wordlists
 - **Realistic Patterns**: Generates human-like password patterns with mixed complexity
 
-## 🚀 Installation
+## Installation
 
 ```bash
 git clone https://github.com/yourusername/sherluck.git
@@ -39,7 +39,7 @@ chmod +x sherluck.py
 python sherluck.py -i person.json -o wordlist.txt
 ```
 
-## ⚡ Advanced Usage
+## Advanced Usage
 
 ### Wordlist Generation Options
 
