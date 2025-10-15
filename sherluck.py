@@ -72,7 +72,6 @@ class Sherluck:
             'english_words': 'https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt'
         }
 
-        # John the Ripper commands database
         self.john_commands = {
             'basic_crack': 'john --wordlist={wordlist} {target}',
             'incremental': 'john --incremental {target}',
@@ -179,7 +178,6 @@ class Sherluck:
         if not word or len(word) == 0:
             return
         
-        # Original word variations
         yield word
         yield word.lower()
         yield word.upper()
@@ -187,7 +185,6 @@ class Sherluck:
         
         variations_generated = 4
         
-        # Simple leet substitutions (most common)
         simple_leet = word.lower()
         simple_subs = {
             'a': '@', 'e': '3', 'i': '1', 'o': '0', 's': '$', 't': '7'
@@ -198,16 +195,14 @@ class Sherluck:
                 new_word = simple_leet.replace(char, replacement)
                 yield new_word
                 variations_generated += 1
-                # Also capitalize first letter
                 yield new_word.capitalize()
                 variations_generated += 1
 
-        # Moderate complexity variations
         if len(word) <= 6 and variations_generated < max_variations:
             for i in range(min(2, len(word))):
                 char = word[i].lower()
                 if char in self.leet_speak_map:
-                    for replacement in self.leet_speak_map[char][:2]:  # Limit to 2 replacements per char
+                    for replacement in self.leet_speak_map[char][:2]:
                         if variations_generated >= max_variations:
                             return
                         new_word = word[:i] + replacement + word[i+1:]
@@ -218,21 +213,18 @@ class Sherluck:
         yield word
         count = 1
         
-        # Common suffixes (most realistic first)
         for suffix in ['123', '1234', '1', '2', '!', '']:
             if count >= max_combinations:
                 return
             yield f"{word}{suffix}"
             count += 1
         
-        # Common prefixes
         for prefix in ['', '!', '1', '2']:
             if count >= max_combinations:
                 return
             yield f"{prefix}{word}"
             count += 1
         
-        # Some special combinations
         special_combos = [f"{word}_{n}" for n in ['123', '2024', '99']] + \
                         [f"{n}{word}" for n in ['1', '2', '99']]
         
@@ -315,13 +307,11 @@ class Sherluck:
             yield (date_component, weights.get('dates', default_weight))
 
     def generate_word_variations(self, word: str, weight: float) -> Generator[Tuple[str, float], None, None]:
-        # Yield original word variations
         yield (word, weight)
         yield (word.lower(), weight)
         yield (word.upper(), weight * 0.9)
         yield (word.capitalize(), weight * 0.9)
         
-        # Generate realistic leet variations
         leet_variations = set()
         for leet_word in self.generate_realistic_leet_variations(word):
             leet_variations.add(leet_word)
@@ -329,11 +319,9 @@ class Sherluck:
         for leet_word in leet_variations:
             yield (leet_word, weight * 0.8)
             
-            # Apply prefixes and suffixes to leet words
             for ps_word in self.apply_prefixes_suffixes(leet_word, 4):
                 yield (ps_word, weight * 0.7)
         
-        # Apply prefixes and suffixes to original word
         for ps_word in self.apply_prefixes_suffixes(word, 4):
             yield (ps_word, weight * 0.7)
 
@@ -341,7 +329,6 @@ class Sherluck:
         if not keywords:
             return
             
-        # First yield all individual words
         seen_combinations = set()
         count = 0
         
@@ -355,7 +342,6 @@ class Sherluck:
         
         separators = ['', '_', '.', '-']
         
-        # Generate 2-word combinations
         for i in range(len(keywords)):
             for j in range(i + 1, len(keywords)):
                 if count >= max_combinations:
@@ -531,7 +517,6 @@ def main():
                        help="Common wordlists to include")
     parser.add_argument("--create-template", action="store_true", help="Create a template JSON file")
     
-    # John the Ripper integration arguments
     parser.add_argument("--john", action="store_true", help="Run John the Ripper after generating wordlist")
     parser.add_argument("--john-command", default="basic_crack", help="John the Ripper command to execute")
     parser.add_argument("--john-target", nargs='+', help="Target files for John the Ripper")
@@ -580,7 +565,6 @@ def main():
     
     generator.save_wordlist(wordlist_generator, args.output, args.max_words)
     
-    # John the Ripper integration
     if args.john:
         if not args.john_target:
             print("[!] Please specify target files for John the Ripper using --john-target")
